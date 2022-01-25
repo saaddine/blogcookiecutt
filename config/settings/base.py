@@ -41,8 +41,18 @@ LOCALE_PATHS = [str(ROOT_DIR / "locale")]
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#databases
 
+# DATABASES = {
+#     "default": env.db("DATABASE_URL", default="postgres://localhost/blogcookiecutter"),
+# }
 DATABASES = {
-    "default": env.db("DATABASE_URL", default="postgres://localhost/blogcookiecutter"),
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'blogcookiecutter',
+        'USER': 'postgres',
+        'PASSWORD': 'saad',
+        'HOST': 'localhost',
+        'PORT': '',
+    }
 }
 DATABASES["default"]["ATOMIC_REQUESTS"] = True
 # https://docs.djangoproject.com/en/stable/ref/settings/#std:setting-DEFAULT_AUTO_FIELD
@@ -77,8 +87,9 @@ THIRD_PARTY_APPS = [
 ]
 
 LOCAL_APPS = [
-    "blogcookiecutter.users",
+
     # Your stuff: custom apps go here
+    "blogcookiecutter.blog",
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -96,9 +107,9 @@ AUTHENTICATION_BACKENDS = [
     "allauth.account.auth_backends.AuthenticationBackend",
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#auth-user-model
-AUTH_USER_MODEL = "users.User"
+#AUTH_USER_MODEL = "users.User"
 # https://docs.djangoproject.com/en/dev/ref/settings/#login-redirect-url
-LOGIN_REDIRECT_URL = "users:redirect"
+#LOGIN_REDIRECT_URL = "users:redirect"
 # https://docs.djangoproject.com/en/dev/ref/settings/#login-url
 LOGIN_URL = "account_login"
 
@@ -180,7 +191,7 @@ TEMPLATES = [
                 "django.template.context_processors.static",
                 "django.template.context_processors.tz",
                 "django.contrib.messages.context_processors.messages",
-                "blogcookiecutter.users.context_processors.allauth_settings",
+
             ],
         },
     }
@@ -190,8 +201,9 @@ TEMPLATES = [
 FORM_RENDERER = "django.forms.renderers.TemplatesSetting"
 
 # http://django-crispy-forms.readthedocs.io/en/latest/install.html#template-packs
-CRISPY_TEMPLATE_PACK = "bootstrap5"
+CRISPY_TEMPLATE_PACK = "bootstrap5" # CRISPY_TEMPLATE_PACK = 'uni_form'
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+CRISPY_FAIL_SILENTLY = not DEBUG
 
 # FIXTURES
 # ------------------------------------------------------------------------------
@@ -263,13 +275,13 @@ ACCOUNT_EMAIL_REQUIRED = True
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
 ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
-ACCOUNT_ADAPTER = "blogcookiecutter.users.adapters.AccountAdapter"
+#ACCOUNT_ADAPTER = "blogcookiecutter.users.adapters.AccountAdapter"
 # https://django-allauth.readthedocs.io/en/latest/forms.html
-ACCOUNT_FORMS = {"signup": "blogcookiecutter.users.forms.UserSignupForm"}
+#ACCOUNT_FORMS = {"signup": "blogcookiecutter.users.forms.UserSignupForm"}
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
-SOCIALACCOUNT_ADAPTER = "blogcookiecutter.users.adapters.SocialAccountAdapter"
+#SOCIALACCOUNT_ADAPTER = "blogcookiecutter.users.adapters.SocialAccountAdapter"
 # https://django-allauth.readthedocs.io/en/latest/forms.html
-SOCIALACCOUNT_FORMS = {"signup": "blogcookiecutter.users.forms.UserSocialSignupForm"}
+#SOCIALACCOUNT_FORMS = {"signup": "blogcookiecutter.users.forms.UserSocialSignupForm"}
 
 
 # Your stuff...

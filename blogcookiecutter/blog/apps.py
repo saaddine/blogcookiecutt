@@ -2,12 +2,12 @@ from django.apps import AppConfig
 from django.utils.translation import gettext_lazy as _
 
 
-class UsersConfig(AppConfig):
-    name = "blogcookiecutter.users"
-    verbose_name = _("Users")
+class BlogConfig(AppConfig):
+    name = 'blogcookiecutter.blog'
+    verbose_name = _("Blog")
 
     def ready(self):
         try:
-            import blogcookiecutter.users.signals  # noqa F401
+            pass
         except ImportError:
             pass
