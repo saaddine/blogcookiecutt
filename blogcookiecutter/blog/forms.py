@@ -3,6 +3,17 @@ from .models import Post
 from crispy_forms.helper import FormHelper
 from crispy_forms.bootstrap import FormActions, PrependedText
 from crispy_forms.layout import Layout, Fieldset,  Submit
+from django.core.exceptions import ValidationError
+from django.utils.translation import gettext_lazy as _
+
+
+def validate_email(value):
+    value = str(value[value.index("@")+1:])
+    if value != "softcatalyst.com":
+        raise ValidationError(
+            _('Email is invalid. The email should be a softcatalyst email'),
+
+        )
 
 
 class PostForm(forms.ModelForm):
@@ -15,7 +26,7 @@ class PostForm(forms.ModelForm):
 class FeedbackForm(forms.Form):
     name = forms.CharField(max_length=100)
     feedbackmsg = forms.CharField(widget=forms.Textarea)
-    email = forms.EmailField()
+    email = forms.EmailField(validators=[validate_email])
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -42,10 +53,3 @@ class FeedbackForm(forms.Form):
 
         )
 
-    def clean_email(self):
-        data = self.cleaned_data['email']
-        if "@" in data:
-            domain = str(data[data.index("@")+1:])
-            if domain != "softcatalyst.com":
-                raise forms.ValidationError("Email is invalid. The email should be a softcatalyst email")
-        return data

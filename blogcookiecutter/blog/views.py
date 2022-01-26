@@ -48,20 +48,6 @@ class CreatePost(generic.CreateView):
         return super().form_valid(form)
 
 
-# def post_edit(request, pk):
-#     post = get_object_or_404(Post, pk=pk)
-#     if request.method == "POST":
-#         form = PostForm(request.POST, instance=post)
-#         if form.is_valid():
-#             post = form.save(commit=False)
-#             post.author = request.user
-#             post.published_date = timezone.now()
-#             post.save()
-#             return redirect('post_detail', pk=post.pk)
-#     else:
-#         form = PostForm(instance=post)
-#     return render(request, 'blog/post_edit.html', {'form': form})
-
 class PostEditView(generic.UpdateView):
 
     model = Post
@@ -78,21 +64,15 @@ class PostEditView(generic.UpdateView):
         return reverse('blog:post_list')
 
 
-def feedbackview(request):
-    if request.method == 'POST':
-        form = FeedbackForm(request.POST)
-        if form.is_valid():
-            print('valid')
-            name = form.cleaned_data['name']
-            feedbackmsg = form.cleaned_data['feedbackmsg']
-            email = form.cleaned_data['email']
-            recipients = ['saad.saadeddine@softcatalyst.com']
-            print(name)
-            send_mail(name, feedbackmsg, email, recipients)
+class CreatefeedView(generic.FormView):
+    form_class = FeedbackForm
+    success_url = '/'
+    template_name = 'blog/feedback.html'
 
-            return HttpResponseRedirect('/')
-
-    else:
-        form = FeedbackForm()
-
-    return render(request, 'blog/feedback.html', {'form': form})
+    def form_valid(self, form):
+        name = form.cleaned_data['name']
+        feedbackmsg = form.cleaned_data['feedbackmsg']
+        email = form.cleaned_data['email']
+        recipients = ['saad.saadeddine@softcatalyst.com']
+        send_mail(name, feedbackmsg, email, recipients)
+        return super().form_valid(form)
