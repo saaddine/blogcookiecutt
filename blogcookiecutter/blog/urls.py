@@ -6,7 +6,7 @@ from . import views
 #   path('post/new/', views.post_new, name='post_new'),
 #   path('post/<int:pk>/edit/', views.post_edit, name='post_edit'),
 # ]
-from blogcookiecutter.blog.views import PostDetailView, CreatePost, PostEditView, PostListView, CreatefeedView
+from blogcookiecutter.blog.views import PostDetailView, CreatePost, PostEditView, PostListView, CreatefeedView, PostDelete, PostUpdate
 
 app_name = "blog"
 urlpatterns = [
@@ -15,6 +15,8 @@ urlpatterns = [
     path('post/new/', CreatePost.as_view(), name='post_new'),
     path('post/<int:pk>/edit/', PostEditView.as_view(), name='post_edit'),
     path('feedback', CreatefeedView.as_view(), name='feedback'),
+    path('posttt/<int:pk>/update/', PostUpdate.as_view(), name='blog_update'),
+    path('<int:pk>/delete/', PostDelete.as_view(), name='blog_delete'),
 
 
 

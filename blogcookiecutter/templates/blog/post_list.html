@@ -1,13 +1,88 @@
 {% extends 'blog/basee.html' %}
-
+{% load static %}
 {% block content %}
     {% for post in posts %}
-        <article class="post">
+
+        <article class="post articlee" id="itemid{{ post.id }}">
+
             <time class="date">
                 {{ post.published_date }}
+              <button type="button" class="btn btn-primary trigr" data-bs-toggle="modal" id="{{post.id}}"   action="{% url 'blog:blog_delete' post.id %}" data-bs-target="#deleteModal"
+                ><img  src="{% static 'images/icons/trash.svg' %}" aria-hidden="true">
+          Delete Blog Post
+        </button>
             </time>
+
             <h2><a href="{% url 'blog:post_detail' pk=post.pk %}">{{ post.title }}</a></h2>
             <p>{{ post.text|linebreaksbr }}</p>
         </article>
-    {% endfor %}
+  {% endfor %}
+<!-- Modal -->
+<div class="modal fade" id="deleteModal" ident="" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Confirm blog post deletion</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Do you really want to delete this blog post ?
+      </div>
+      <div class="modal-footer">
+        <form method="post"  id="delete-form">
+        {% csrf_token %}
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+        <button type="button" class="btn btn-danger delete-button1"  >Yes</button>
+          </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <script>
+
+  $('.trigr').on('click',function (){
+
+    act=$(this).attr('action')
+    iid=$(this).attr('id')
+    $('#delete-form').attr('action',act)
+    $('#deleteModal').attr('ident',iid)
+
+
+    }
+
+
+
+
+
+  )
+
+
+  $('.delete-button1').on('click', function () {
+      console.log("ooo")
+      console.log($('#delete-form').serialize())
+
+    console
+      $.ajax({
+        url: $('#delete-form').attr('action'),
+        method: 'post',
+        dataType: 'json',
+        data: $('#delete-form').serialize(),
+        success: function (data) {
+          console.log(data)
+          console.log(data.message)
+          $('#itemid'+$('#deleteModal').attr('ident')).remove()
+          $('#deleteModal').modal('hide')
+
+        },
+        error: function () {
+          console.log('error')
+          console.log(data.message)
+        },
+      });
+
+    });
+
+
+  </script>
 {% endblock %}
